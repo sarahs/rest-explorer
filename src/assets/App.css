@@ -13,6 +13,14 @@ html, body, div#root {
   width: 100%;
 }
 
+.top-container {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 100;
+  border-bottom: 1px solid lightgray;
+}
+
 button, input[type="button" i], input[type="submit" i] {
   font-size: 14px;
   height: 25px;
@@ -125,7 +133,7 @@ button:focus, input[type="button" i]:focus {
   justify-content: space-between;
   min-height: min-content;
   height: 100%;
-  overflow-y: auto;
+  overflow-y: visible;
   flex: auto;
 }
 
