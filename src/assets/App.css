@@ -37,7 +37,7 @@ button {
 
 button:focus {
   outline: 0;
-} 
+}
 
 button:hover {
   background: #283048;
@@ -47,10 +47,10 @@ button:hover {
 }
 
 .container {
-  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  font-family: 'Open sans', sans-serif;
+  /* font-family: "Trebuchet MS", Arial, Helvetica, sans-serif; */
   display: flex;
   flex-direction: column;
-  /* overflow: hidden; */
   height: 100%;
   width: 100%;
 }
