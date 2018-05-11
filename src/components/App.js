@@ -190,6 +190,7 @@ class App extends Component {
   resetResults() {
     this.setState({
       categoriesListSel: '',
+      namesListSel: '',
       enteredPathParams: {},
       enteredBodyParams: {}
     })
