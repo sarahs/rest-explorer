@@ -4,6 +4,7 @@ class Results extends React.Component {
   render() {
     const {
       hasEnteredToken,
+      categoriesListSel,
       method,
       SubmittedPath,
       SubmittedBodyParams,
@@ -25,15 +26,17 @@ class Results extends React.Component {
           <span className="copy-span"><button onClick={e => onCopy(e)}>Copy</button>{copySuccess}</span>
         </div>
         {hasEnteredToken
-          ? (<pre ref={copyRef}>curl{"\n"}
-              {"  "}-H "Authorization: bearer STORED_API_TOKEN"{"\n"}
-              {methodLine}
-              {"  "}"{SubmittedPath}"
-              {SubmittedBodyParams
-                ? "\n  -d '" + SubmittedBodyParams + "'"
-                : null
-              }
-            </pre>)
+          ? categoriesListSel
+            ? (<pre ref={copyRef}>curl{"\n"}
+                {"  "}-H "Authorization: bearer STORED_API_TOKEN"{"\n"}
+                {methodLine}
+                {"  "}"{SubmittedPath}"
+                {SubmittedBodyParams
+                  ? "\n  -d '" + SubmittedBodyParams + "'"
+                  : null
+                }
+              </pre>)
+            : <pre>Start by choosing a category!</pre>
           : <pre>You need to enter an API token!</pre>
         }
       </div>

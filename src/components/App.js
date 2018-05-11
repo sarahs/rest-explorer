@@ -55,6 +55,7 @@ class App extends Component {
     this.handleClearBody = this.handleClearBody.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.clearResponse = this.clearResponse.bind(this);
+    this.resetResults = this.resetResults.bind(this);
   }
 
   componentDidMount() {
@@ -186,6 +187,15 @@ class App extends Component {
     e.preventDefault()
   }
 
+  resetResults() {
+    this.setState({
+      categoriesListSel: '',
+      enteredPathParams: {},
+      enteredBodyParams: {}
+    })
+    this.clearResponse()
+  }
+
   render() {
     const {routes, categoriesListSel, namesListSel} = this.state
     const categoriesList = Object.keys(routes)
@@ -216,93 +226,100 @@ class App extends Component {
 
     return (
       <div className="container">
-      <TokenEntry
-        hasEnteredToken={this.state.hasEnteredToken}
-        tokenEditShow={this.state.tokenEditShow}
-        toggleTokenEdit={this.toggleTokenEdit}
-        onSubmit={this.handleTokenSubmit}
-        onChange={this.handleTokenChange}
-        value={this.state.token}
-      />
-      <div className="top-panel">
-        <Results
-          hasEnteredToken={this.state.hasEnteredToken}
-          method={method}
-          endpointName={endpointName}
-          SubmittedPath={SubmittedPath}
-          SubmittedBodyParams={SubmittedBodyParams}
-          copyRef={this.copyElement}
-          copySuccess={this.state.copySuccess}
-          onCopy={this.copyToClipboard}
-        />
-        {!isPathValid
-          ? (<div className="path-not-complete">Invalid characters entered: {invalidCharsEntered}</div>)
-          : (null)
-        }
-        {isCodeRunnable && this.state.hasEnteredToken
-          ? (<div className="run-button"><input type="button" value="Run!" onClick={e => this.handleSubmit(e)} /></div>)
-          : (null)
-        }
-      </div>
-      <div className="horizontal-gutter"/>
-      <div className="bottom-container">
-        <div className="left-panel">
-          <Picker
-            name="categoriesListSel"
-            value={categoriesListSel}
-            onChange={this.handleSelectChange}
-            options={categoriesList}
-            docslink={docslink}
+        <div className="top-container">
+          <TokenEntry
+            hasEnteredToken={this.state.hasEnteredToken}
+            tokenEditShow={this.state.tokenEditShow}
+            toggleTokenEdit={this.toggleTokenEdit}
+            onSubmit={this.handleTokenSubmit}
+            onChange={this.handleTokenChange}
+            value={this.state.token}
           />
-        {categoriesListSel
-          ? (<Picker
-              name="namesListSel"
-              value={namesListSel}
-              onChange={this.handleSelectChange}
-              options={namesList}
-              docslink={docslink}
-            />)
-          : ( null )
-        }
-        {selectedEndpoint && selectedEndpoint["description"].length > 0
-          ? (<EndpointInfo
-               description={selectedEndpoint["description"]}
-            />)
-          : ( null )
-        }
-        {paramsList
-          ? (<ParamsForm
-               pathArray={pathArray}
-               pathParamsArray={pathParamsArray}
-               bodyParamsArray={bodyParamsArray}
-               apiBase={apiBase}
-               method={method}
-               onPathChange={this.handlePathFormChange}
-               onBodyChange={this.handleBodyFormChange}
-               onClearPath={this.handleClearPath}
-               onClearBody={this.handleClearBody}
-               enteredPathParams={this.state.enteredPathParams}
-               enteredBodyParams={this.state.enteredBodyParams}
-               inputRef={this.inputElement}
-               isPathComplete={isPathComplete}
-               isBodyComplete={isBodyComplete}
-            />)
-          : ( null )
-        }
+          <div className="results-container">
+            <Results
+              hasEnteredToken={this.state.hasEnteredToken}
+              categoriesListSel={this.state.categoriesListSel}
+              method={method}
+              endpointName={endpointName}
+              SubmittedPath={SubmittedPath}
+              SubmittedBodyParams={SubmittedBodyParams}
+              copyRef={this.copyElement}
+              copySuccess={this.state.copySuccess}
+              onCopy={this.copyToClipboard}
+            />
+            {!isPathValid
+              ? (<div className="path-not-complete">Invalid characters entered: {invalidCharsEntered}</div>)
+              : (null)
+            }
+            {isCodeRunnable && this.state.hasEnteredToken
+              ? (<div className="run-button"><input type="button" value="Run!" onClick={e => this.handleSubmit(e)} /></div>)
+              : (null)
+            }
+            {this.state.hasEnteredToken
+              ? (<div className="reset-button"><input type="button" value="Reset" onClick={e => this.resetResults(e)} /></div>)
+              : (null)
+            }
+          </div>
         </div>
-        <div className="vertical-gutter"/>
-        <div className="right-panel">
-          <h2>Response</h2>
-          <div className="response">
-            <pre>{this.state.submitted
-                	 ? runRequest(method, SubmittedPath, this.state.enteredBodyParams, apiBase, this.state.token)
-                	  : "{}"
-                  }
-            </pre>
+        <div className="horizontal-gutter"/>
+        <div className="bottom-container">
+          <div className="left-panel">
+            <Picker
+              name="categoriesListSel"
+              value={categoriesListSel}
+              onChange={this.handleSelectChange}
+              options={categoriesList}
+              docslink={docslink}
+            />
+          {categoriesListSel
+            ? (<Picker
+                name="namesListSel"
+                value={namesListSel}
+                onChange={this.handleSelectChange}
+                options={namesList}
+                docslink={docslink}
+              />)
+            : ( null )
+          }
+          {selectedEndpoint && selectedEndpoint["description"].length > 0
+            ? (<EndpointInfo
+                 description={selectedEndpoint["description"]}
+              />)
+            : ( null )
+          }
+          {paramsList
+            ? (<ParamsForm
+                 pathArray={pathArray}
+                 pathParamsArray={pathParamsArray}
+                 bodyParamsArray={bodyParamsArray}
+                 apiBase={apiBase}
+                 method={method}
+                 onPathChange={this.handlePathFormChange}
+                 onBodyChange={this.handleBodyFormChange}
+                 onClearPath={this.handleClearPath}
+                 onClearBody={this.handleClearBody}
+                 enteredPathParams={this.state.enteredPathParams}
+                 enteredBodyParams={this.state.enteredBodyParams}
+                 inputRef={this.inputElement}
+                 isPathComplete={isPathComplete}
+                 isBodyComplete={isBodyComplete}
+              />)
+            : ( null )
+          }
+          </div>
+          <div className="vertical-gutter"/>
+          <div className="right-panel">
+            <h2>Response</h2>
+            <div className="response">
+              <pre>{this.state.submitted
+                  	 ? runRequest(method, SubmittedPath, this.state.enteredBodyParams, apiBase, this.state.token)
+                  	  : "{}"
+                    }
+              </pre>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     )
   }
 }

@@ -5,7 +5,7 @@ const TokenEntry = ({hasEnteredToken, tokenEditShow, toggleTokenEdit, onSubmit, 
   // const buttonText = hasEnteredToken? "Edit token" : "Enter token"
 
   return (
-    <nav className="token-header">
+    <nav className="top-bar">
       <p>
         {hasEnteredToken
           ? (<span className="has-token">You have a stored API token. You can run requests on your <b>LIVE</b> GitHub data.

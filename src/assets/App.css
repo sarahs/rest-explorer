@@ -1,5 +1,6 @@
-html, body, .container {
+html, body, div#root {
   margin: 0;
+  padding: 0;
   height: 100%;
 }
 
@@ -7,8 +8,8 @@ html, body, .container {
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   display: flex;
   flex-direction: column;
-  height: 100%;
   /* overflow: hidden; */
+  height: 100%;
   width: 100%;
 }
 
@@ -22,13 +23,17 @@ button:focus, input[type="button" i]:focus {
   outline: 0;
 }
 
-.token-header {
+.top-container {
+  flex: 1 0 10%;
+}
+
+.top-bar {
   padding: 7px 25px 0;
   background-color: #fff9ea;
   border-bottom: 1px solid #eee;
 }
 
-.token-header form {
+.top-bar form {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -36,14 +41,14 @@ button:focus, input[type="button" i]:focus {
   margin-bottom: 10px;
 }
 
-.token-header input[type="text"] {
+.top-bar input[type="text"] {
   width: 300px;
   border: 1px solid #cccccc;
   border-radius: 3px;
   padding-left: 3px;
 }
 
-.token-header button, .token-header input {
+.top-bar button, .top-bar input {
   margin-left: 5px;
 }
 
@@ -55,7 +60,7 @@ button:focus, input[type="button" i]:focus {
   color: black;
 }
 
-.top-panel {
+.results-container {
   padding: 20px 25px 15px;
 }
 
@@ -109,22 +114,30 @@ button:focus, input[type="button" i]:focus {
   margin-right: 6px;
 }
 
-.run-button input[type="button" i] {
+.run-button, .reset-button {
   font-size: 16px;
+  display: inline-block;
+}
+
+.run-button input[type="button" i] {
+  margin-right: 8px;
 }
 
 .bottom-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  /* min-height: min-content; */
+  min-height: min-content;
   height: 100%;
+  overflow-y: auto;
+  flex: auto;
 }
 
 .horizontal-gutter {
   background-color: #eeeeee;
   height: 5px;
   border: 1px solid lightgray;
+  padding: 3px;
 }
 
 .vertical-gutter {
@@ -137,6 +150,7 @@ button:focus, input[type="button" i]:focus {
   justify-content: space-between;
   overflow: scroll;
   padding: 0 25px 10px;
+  height: 100%;
 }
 
 .left-panel {
