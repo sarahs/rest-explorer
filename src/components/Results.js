@@ -36,7 +36,7 @@ class Results extends React.Component {
                   : null
                 }
               </pre>)
-            : <pre>Start by choosing a category!</pre>
+            : <pre>Start by choosing a category below.</pre>
           : <pre>You need to enter an API token!</pre>
         }
       </div>
