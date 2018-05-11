@@ -21,11 +21,7 @@ button, input[type="button" i], input[type="submit" i] {
 
 button:focus, input[type="button" i]:focus {
   outline: 0;
-}
-
-.top-container {
-  flex: 1 0 10%;
-}
+} 
 
 .top-bar {
   padding: 7px 25px 0;
@@ -176,7 +172,7 @@ pre {
   color: #3B5998;
   margin: 10px 0;
   outline: 0;
-  padding: 5px 20px 5px 18px;
+  padding: 15px 20px 15px 18px;
 }
 
 code {
