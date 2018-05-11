@@ -4,6 +4,48 @@ html, body, div#root {
   height: 100%;
 }
 
+a {
+  color: #283048;
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 1px solid #283048;
+}
+
+.top-bar a {
+  color: #50E3C2;
+  border-bottom-color: #50E3C2;
+}
+
+a:hover, a:active {
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+button {
+  -webkit-appearance: none;
+  background: #50E3C2;
+  color: #283048;
+  border: 2px solid #50E3C2;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 3px;
+  font-weight: 600;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition-duration: 0.5s;
+}
+
+button:focus {
+  outline: 0;
+} 
+
+button:hover {
+  background: #283048;
+  border: 2px solid #50E3C2;
+  color: #50E3C2;
+  transform: scale(0.9);
+}
+
 .container {
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   display: flex;
@@ -21,20 +63,15 @@ html, body, div#root {
   border-bottom: 1px solid lightgray;
 }
 
-button, input[type="button" i], input[type="submit" i] {
-  font-size: 14px;
-  height: 25px;
-  border-radius: 3px;
+.top-bar {
+  padding: 15px;
+  background: linear-gradient(to left, #859398, #283048);
+  color: white;
+  border-bottom: 1px solid #eee;
 }
 
-button:focus, input[type="button" i]:focus {
-  outline: 0;
-} 
-
-.top-bar {
-  padding: 7px 25px 0;
-  background-color: #fff9ea;
-  border-bottom: 1px solid #eee;
+.top-bar p {
+  margin-left: 10px;
 }
 
 .top-bar form {
@@ -53,15 +90,11 @@ button:focus, input[type="button" i]:focus {
 }
 
 .top-bar button, .top-bar input {
-  margin-left: 5px;
+  margin-left: 15px;
 }
 
 .has-token, .has-token button {
   color: gray;
-}
-
-.no-token {
-  color: black;
 }
 
 .results-container {
@@ -159,12 +192,10 @@ button:focus, input[type="button" i]:focus {
 
 .left-panel {
   width: 60%;
-  padding-right: 2.5%;
 }
 
 .right-panel {
   width: 40%;
-  padding-left: 2.5%;
 }
 
 pre {
@@ -175,7 +206,7 @@ pre {
   font-size: 25px;
   background: #e2e2e2;
   border: 1px solid #d0d0d0;
-  color: #3B5998;
+  color: #283048;
   margin: 10px 0;
   outline: 0;
   padding: 15px 20px 15px 18px;
@@ -240,24 +271,4 @@ table tr:nth-child(even) {
 
 table tr:hover {
   background-color: #ddd;
-}
-
-a:link {
-  text-decoration: none;
-  color: #2A5DB0;
-}
-
-a:visited {
-  text-decoration: none;
-  color: #2A5DB0;
-}
-
-a:hover {
-  text-decoration: underline;
-  color: #2A5DB0;
-}
-
-a:active {
-  text-decoration: underline;
-  color: #2A5DB0;
 }
