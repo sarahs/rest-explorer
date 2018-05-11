@@ -39,7 +39,13 @@ const ParamsTable = ({method, paramsArray, enteredBodyParams, onChange, onClearB
         )}
       </tbody>
     </table>
-    <input type="button" value="Clear" onClick={e => onClearBody(e)} />
+    <div className="clear-div">
+      <input type="button" value="Clear" onClick={e => onClearBody(e)} />
+      {isBodyComplete
+        ? <span>Complete!</span>
+        : null
+      }
+    </div>
   </div>
 )
 

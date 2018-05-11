@@ -37,7 +37,7 @@ class App extends Component {
       namesListSel: '',
       enteredPathParams: {},
       enteredBodyParams: {},
-      copySuccess: '' ,
+      copySuccess: '',
       submitted: false
     }
     this.inputElement = React.createRef();
@@ -49,11 +49,12 @@ class App extends Component {
     this.handlePathFormChange = this.handlePathFormChange.bind(this);
     this.handleBodyFormChange = this.handleBodyFormChange.bind(this);
     this.copyToClipboard = this.copyToClipboard.bind(this);
+    this.clearCopySelection = this.clearCopySelection.bind(this);
     this.escapeNewLines = this.escapeNewLines.bind(this);
     this.handleClearPath = this.handleClearPath.bind(this);
     this.handleClearBody = this.handleClearBody.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.clearCopySelection = this.clearCopySelection.bind(this);
+    this.clearResponse = this.clearResponse.bind(this);
   }
 
   componentDidMount() {
@@ -98,6 +99,7 @@ class App extends Component {
       enteredBodyParams: {}
     })
     this.clearCopySelection()
+    this.clearResponse()
   }
 
   handleClearPath() {
@@ -105,6 +107,7 @@ class App extends Component {
       enteredPathParams: {}
     })
     this.clearCopySelection()
+    this.clearResponse()
   }
 
   handleClearBody() {
@@ -112,6 +115,7 @@ class App extends Component {
       enteredBodyParams: {}
     })
     this.clearCopySelection()
+    this.clearResponse()
   }
 
   handlePathFormChange(e) {
@@ -151,7 +155,7 @@ class App extends Component {
       selection.removeAllRanges()
       selection.addRange(range)
       document.execCommand('copy')
-      this.setState({ copySuccess: 'Copied!' })
+      this.setState({ copySuccess: ' Copied!' })
     }
     e.stopPropagation()
   }
@@ -169,8 +173,16 @@ class App extends Component {
     }
   }
 
+  clearResponse() {
+    this.setState({
+      submitted: false
+    })
+  }
+
   handleSubmit(e) {
-    this.setState({submitted: true})
+    this.setState({
+      submitted: true
+    })
     e.preventDefault()
   }
 
@@ -180,7 +192,7 @@ class App extends Component {
     const firstCategory = categoriesList.length > 0 && categoriesList[0]
     const selectedCategory = categoriesListSel && routes[categoriesListSel]
     const namesList = categoriesListSel && selectedCategory.map(n => n["name"])
-    const selectedEndpoint = namesListSel && selectedCategory.find(x => x.name === namesListSel)
+    const selectedEndpoint = namesListSel && selectedCategory && selectedCategory.find(x => x.name === namesListSel)
     const method = selectedEndpoint && selectedEndpoint["method"]
     const paramsList = selectedEndpoint ? selectedEndpoint["params"].length > 0 && selectedEndpoint["params"] : null
     const path = selectedEndpoint ? selectedEndpoint["path"] : ""
@@ -197,8 +209,6 @@ class App extends Component {
     const invalidCharsEntered = isValid(pathParamsArray, this.state.enteredPathParams)[1]
     const isBodyComplete = (method === "GET" || method === "DELETE" || !method) ? "ignore" : isComplete(bodyParamsArray, this.state.enteredBodyParams, "body")
     const isCodeRunnable = isPathComplete === true && isPathValid === true && isBodyComplete !== false
-
-    console.log(isComplete(pathParamsArray, this.state.enteredPathParams, "path"))
 
     const SubmittedQueryStringParams = generateQueryStringParams(method, this.state.enteredBodyParams)
     const SubmittedPath = generatePath(this.state.enteredPathParams, apiBase, this.inputElement, SubmittedQueryStringParams, path)
@@ -234,6 +244,7 @@ class App extends Component {
           : (null)
         }
       </div>
+      <div className="horizontal-gutter"/>
       <div className="bottom-container">
         <div className="left-panel">
           <Picker
@@ -279,6 +290,7 @@ class App extends Component {
           : ( null )
         }
         </div>
+        <div className="vertical-gutter"/>
         <div className="right-panel">
           <h2>Response</h2>
           <div className="response">

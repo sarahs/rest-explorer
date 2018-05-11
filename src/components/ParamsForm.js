@@ -23,7 +23,13 @@ const ParamsForm = ({pathParamsArray, pathArray, apiBase, enteredPathParams,
                   inputRef={inputRef}
                 />
               </pre>
-              <input type="button" value="Clear" onClick={e => onClearPath(e)} />
+              <div className="clear-div">
+                <input type="button" value="Clear" onClick={e => onClearPath(e)} />
+                {isPathComplete
+                  ? <span>Complete!</span>
+                  : null
+                }
+              </div>
             </div>
           ) : ( null )}
           {bodyParamsArray.length > 0 ? (

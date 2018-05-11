@@ -1,10 +1,15 @@
+html, body, .container {
+  margin: 0;
+  height: 100%;
+}
+
 .container {
-  margin: 0 50px;
-  padding: 0 30px;
-  text-align: left;
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  /* overflow: hidden; */
+  width: 100%;
 }
 
 button, input[type="button" i], input[type="submit" i] {
@@ -17,12 +22,10 @@ button:focus, input[type="button" i]:focus {
   outline: 0;
 }
 
-.has-token, .has-token button {
-  color: gray;
-}
-
-.no-token {
-  color: black;
+.token-header {
+  padding: 7px 25px 0;
+  background-color: #fff9ea;
+  border-bottom: 1px solid #eee;
 }
 
 .token-header form {
@@ -35,7 +38,7 @@ button:focus, input[type="button" i]:focus {
 
 .token-header input[type="text"] {
   width: 300px;
-  border:1px solid #cccccc;
+  border: 1px solid #cccccc;
   border-radius: 3px;
   padding-left: 3px;
 }
@@ -44,13 +47,22 @@ button:focus, input[type="button" i]:focus {
   margin-left: 5px;
 }
 
+.has-token, .has-token button {
+  color: gray;
+}
+
+.no-token {
+  color: black;
+}
+
 .top-panel {
-  padding-bottom: 15px;
-  border-bottom: 3px double #8c8b8b;
+  padding: 20px 25px 15px;
 }
 
 .generated-curl {
-  margin: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .generated-curl-header {
@@ -62,11 +74,6 @@ button:focus, input[type="button" i]:focus {
   margin: 0;
   padding: 0;
 }
-
-/* .generated-curl-header a:link, .generated-curl-header a:visited,
-.generated-curl-header a:hover, .generated-curl-header a:active {
-  color: black;
-} */
 
 .path-not-complete, .body-not-complete {
   padding-top: 10px;
@@ -88,7 +95,18 @@ button:focus, input[type="button" i]:focus {
   content: '\2713';
   display: inline-block;
   color: green;
-  padding: 0 6px 0 0;
+  padding-right: 6px;
+}
+
+.clear-div {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  align-items: center;
+}
+
+.clear-div input[type="button" i] {
+  margin-right: 6px;
 }
 
 .run-button input[type="button" i] {
@@ -99,20 +117,38 @@ button:focus, input[type="button" i]:focus {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  /* min-height: min-content; */
+  height: 100%;
+}
+
+.horizontal-gutter {
+  background-color: #eeeeee;
+  height: 5px;
+  border: 1px solid lightgray;
+}
+
+.vertical-gutter {
+  background-color: #eeeeee;
+  width: 5px;
+  border: 1px solid lightgray;
 }
 
 .left-panel, .right-panel {
   justify-content: space-between;
+  overflow: scroll;
+  padding: 0 25px 10px;
 }
 
 .left-panel {
+  flex: 1 1 0%;
   width: 50%;
   padding-right: 2.5%;
-  border-right: 3px double #8c8b8b;
 }
 
 .right-panel {
-  width: 45%;
+  flex: 1 1 0%;
+  width: 50%;
+  padding-left: 2.5%;
 }
 
 pre {
@@ -148,7 +184,7 @@ code {
 
 .pathinput pre input[type="text"] {
   font-size: 20px;
-  border:1px solid #cccccc;
+  border: 1px solid #cccccc;
   border-radius: 3px;
   padding-left: 3px;
   width: 80px;
