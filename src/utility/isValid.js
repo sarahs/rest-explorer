@@ -1,5 +1,5 @@
 export default function isValid(paramsArray, enteredParams) {
-  const allowedCharsRegex = new RegExp('[^a-z0-9._-]{1,}')
+  const allowedCharsRegex = new RegExp('[^a-zA-Z0-9._-]{1,}')
   let invalidCharsEntered = []
   Object.values(enteredParams).map(p =>
     allowedCharsRegex.test(p) && invalidCharsEntered.push(p.match(allowedCharsRegex)[0])
