@@ -5,10 +5,9 @@ html, body, div#root {
 }
 
 .container {
-  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  font-family: 'Open sans', sans-serif;
   display: flex;
   flex-direction: column;
-  /* overflow: hidden; */
   height: 100%;
   width: 100%;
 }
@@ -21,7 +20,15 @@ button, input[type="button" i], input[type="submit" i] {
 
 button:focus, input[type="button" i]:focus {
   outline: 0;
-} 
+}
+
+.top-container {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 100;
+  border-bottom: 1px solid lightgray;
+}
 
 .top-bar {
   padding: 7px 25px 0;
@@ -125,7 +132,7 @@ button:focus, input[type="button" i]:focus {
   justify-content: space-between;
   min-height: min-content;
   height: 100%;
-  overflow-y: auto;
+  overflow-y: visible;
   flex: auto;
 }
 
@@ -150,15 +157,11 @@ button:focus, input[type="button" i]:focus {
 }
 
 .left-panel {
-  flex: 1 1 0%;
-  width: 50%;
-  padding-right: 2.5%;
+  width: 60%;
 }
 
 .right-panel {
-  flex: 1 1 0%;
-  width: 50%;
-  padding-left: 2.5%;
+  width: 40%;
 }
 
 pre {
