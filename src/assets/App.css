@@ -47,7 +47,7 @@ button:hover {
 }
 
 .container {
-  font-family: 'Open sans', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -64,7 +64,7 @@ button:hover {
 
 .top-bar {
   padding: 15px;
-  background: linear-gradient(to left, #859398, #283048);
+  background: linear-gradient(to left, #677175, #283048);
   color: white;
   border-bottom: 1px solid #eee;
 }
