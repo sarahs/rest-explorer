@@ -37,7 +37,7 @@ button, .top-bar input:not([type="text"]) {
 
 button:focus {
   outline: 0;
-} 
+}
 
 button:hover, .top-bar input:not([type="text"]):hover {
   background: #283048;
