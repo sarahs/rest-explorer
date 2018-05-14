@@ -10,11 +10,13 @@ import generatePath from '../utility/generatePath'
 import generateBodyParams from '../utility/generateBodyParams'
 import isComplete from '../utility/isComplete'
 import isValid from '../utility/isValid'
-import runRequest from '../utility/runRequest'
+// import runRequest from '../utility/runRequest'
 import axios from 'axios'
 import '../assets/App.css'
 
 const RoutesURL = 'https://octokit.github.io/routes/index.json'
+
+const apiBase = 'https://api.github.com'
 
 class App extends Component {
   constructor(props) {
@@ -35,10 +37,13 @@ class App extends Component {
       routes: {},
       categoriesListSel: '',
       namesListSel: '',
+      includeHeaders: true,
       enteredPathParams: {},
       enteredBodyParams: {},
       copySuccess: '',
-      submitted: false
+      submitted: false,
+      response: '',
+      error: '{}'
     }
     this.inputElement = React.createRef();
     this.copyElement = React.createRef();
@@ -53,9 +58,13 @@ class App extends Component {
     this.escapeNewLines = this.escapeNewLines.bind(this);
     this.handleClearPath = this.handleClearPath.bind(this);
     this.handleClearBody = this.handleClearBody.bind(this);
+    this.toggleHeaders = this.toggleHeaders.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.runRequest = this.runRequest.bind(this);
     this.clearResponse = this.clearResponse.bind(this);
     this.resetResults = this.resetResults.bind(this);
+    this.handleSuccessResponse = this.handleSuccessResponse.bind(this);
+    this.handleErrorResponse = this.handleErrorResponse.bind(this);
   }
 
   componentDidMount() {
@@ -152,7 +161,12 @@ class App extends Component {
     if (window.getSelection) {
       selection = window.getSelection()
       range = document.createRange()
-      range.selectNode(this.copyElement.current)
+      if (this.copyElement.current) {
+        range.selectNode(this.copyElement.current)
+      }
+      else {
+        range.selectNode(document.getElementsByTagName("pre").item(0))
+      }
       selection.removeAllRanges()
       selection.addRange(range)
       document.execCommand('copy')
@@ -180,10 +194,17 @@ class App extends Component {
     })
   }
 
-  handleSubmit(e) {
+  toggleHeaders() {
+    this.state.includeHeaders
+      ? this.setState({includeHeaders: false})
+      : this.setState({includeHeaders: true})
+  }
+
+  handleSubmit(e, submittedPath) {
     this.setState({
       submitted: true
     })
+    this.runRequest(submittedPath)
     e.preventDefault()
   }
 
@@ -192,9 +213,34 @@ class App extends Component {
       categoriesListSel: '',
       namesListSel: '',
       enteredPathParams: {},
-      enteredBodyParams: {}
+      enteredBodyParams: {},
+      response: '',
+      error: '{}'
     })
     this.clearResponse()
+  }
+
+  runRequest(submittedPath, submittedBody) {
+    let apiClient = axios.create({
+      baseURL: apiBase,
+      timeout: 1000
+    })
+
+    apiClient.defaults.headers.common['Authorization'] = this.state.token
+
+    apiClient.get(submittedPath)
+      .then(response => this.handleSuccessResponse(response))
+      .catch(error => this.handleErrorResponse(error))
+  }
+
+  handleSuccessResponse(response) {
+    console.log(response)
+    this.setState({response: response})
+  }
+
+  handleErrorResponse(error) {
+    console.log(error)
+    this.setState({error: error})
   }
 
   render() {
@@ -225,6 +271,10 @@ class App extends Component {
     const SubmittedPath = generatePath(this.state.enteredPathParams, apiBase, this.inputElement, SubmittedQueryStringParams, path)
     const SubmittedBodyParams = generateBodyParams(method, this.state.enteredBodyParams)
 
+    // const myResponse = this.state.submitted ? runRequest(method, SubmittedPath, this.state.enteredBodyParams, apiBase, this.state.token, this.generateSuccessResponse, this.generateErrorResponse) : "{}"
+
+    // console.log(myResponse)
+
     return (
       <div className="container">
         <div className="top-container">
@@ -240,6 +290,7 @@ class App extends Component {
             <Results
               hasEnteredToken={this.state.hasEnteredToken}
               categoriesListSel={this.state.categoriesListSel}
+              includeHeaders={this.state.includeHeaders}
               method={method}
               endpointName={endpointName}
               SubmittedPath={SubmittedPath}
@@ -248,18 +299,21 @@ class App extends Component {
               copySuccess={this.state.copySuccess}
               onCopy={this.copyToClipboard}
             />
-            {!isPathValid
-              ? (<div className="path-not-complete">Invalid characters entered: {invalidCharsEntered}</div>)
-              : (null)
-            }
-            {isCodeRunnable && this.state.hasEnteredToken
-              ? (<div className="run-button"><input type="button" value="Run!" onClick={e => this.handleSubmit(e)} /></div>)
-              : (null)
-            }
-            {this.state.hasEnteredToken
-              ? (<div className="reset-button"><input type="button" value="Reset" onClick={e => this.resetResults(e)} /></div>)
-              : (null)
-            }
+            <div className="button-row">
+              {isCodeRunnable && this.state.hasEnteredToken
+                ? (<div className="run-button"><input type="button" value="Run!" onClick={e => this.handleSubmit(e, SubmittedPath, this.state.enteredBodyParams)} /></div>)
+                : (null)
+              }
+              {this.state.hasEnteredToken
+                ? (<div className="reset-button"><input type="button" value="Reset" onClick={e => this.resetResults(e)} /></div>)
+                : (null)
+              }
+              {!isPathValid
+                ? (<div className="path-not-complete">Invalid characters entered: "{invalidCharsEntered}"</div>)
+                : (null)
+              }
+              <label className="include-headers"><input name="includeHeaders" type="checkbox" checked={this.state.includeHeaders} onChange={this.toggleHeaders} /> Include headers in response</label>
+            </div>
           </div>
         </div>
         <div className="horizontal-gutter"/>
@@ -312,11 +366,27 @@ class App extends Component {
           <div className="right-panel">
             <h2>Response</h2>
             <div className="response">
-              <pre>{this.state.submitted
-                  	 ? runRequest(method, SubmittedPath, this.state.enteredBodyParams, apiBase, this.state.token)
-                  	  : "{}"
-                    }
-              </pre>
+              {this.state.response
+                ? <div className="status">
+                    <p>Status:</p>
+                    <pre>{this.state.response.status + ' ' + this.state.response.statusText}</pre>
+                  </div>
+                : null
+              }
+              {this.state.response && this.state.includeHeaders
+                ? <div className="headers">
+                    <p>Headers:</p>
+                    <pre>{JSON.stringify(this.state.response.headers, null, 2)}</pre>
+                  </div>
+                : null
+              }
+              {this.state.response
+                ? <div className="data">
+                    <p>Response:</p>
+                    <pre>{JSON.stringify(this.state.response.data, null, 2)}</pre>
+                  </div>
+                : <div className="data"><pre>{this.state.error}</pre></div>
+              }
             </div>
           </div>
         </div>
