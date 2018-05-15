@@ -3,12 +3,11 @@ export default function generatePath(enteredPathParams, apiBase, inputElement, S
     if (Object.keys(enteredPathParams).length !== 0) {
       mypath.push(apiBase)
       const allTags = inputElement.current.getElementsByTagName("*")
-      const inputTags = inputElement.current.getElementsByTagName("INPUT")
-      const lastInputIndex = inputTags.length - 1
-      const lastInput = inputTags.item(lastInputIndex)
+      const secondToLastItemIndex = allTags.length - 2
+      const secondToLastItem = allTags.item(secondToLastItemIndex)
       for (let item of allTags) {
         item.nodeName === "INPUT"
-          ? mypath.push(item.value + (item !== lastInput ? "/" : ""))
+          ? mypath.push(item.value + (item.value !== secondToLastItem.value ? "/" : ""))
           : item.nodeName !== "DIV"
             ? Array.from(item.childNodes).map(x => x.nodeName === "INPUT" ? "" : mypath.push(x.data))
             : mypath.push("")
