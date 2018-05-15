@@ -188,6 +188,7 @@ input[type="button"]:hover {
   height: 5px;
   border: 1px solid var(--light-gray-color);
   padding: 3px;
+  border: 1px solid var(--light-gray-color);
 }
 
 .vertical-gutter {
@@ -225,6 +226,12 @@ pre {
   margin: 10px 0;
   outline: 0;
   padding: 15px 20px 15px 18px;
+}
+
+.data pre,
+.status pre,
+.headers pre {
+  font-size: 15px;
 }
 
 code {

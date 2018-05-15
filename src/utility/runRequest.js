@@ -1,35 +1,64 @@
 import axios from 'axios'
 
-export default function runRequest(method, submittedPath, submittedBody, apiBase, token) {
+export default function runRequest(apiClient,
 
-  console.log(token)
-  console.log(method)
-  console.log(submittedPath)
-  console.log(submittedBody)
-
-  const instance = axios.create({
-    baseURL: apiBase
+  const apiClient = axios.create({
+    baseURL: apiBase,
+    timeout: 1000
   })
 
-  instance.defaults.headers.common['Authorization'] = token
+  apiClient.defaults.headers.common['Authorization'] = token
 
-  return "Placeholder! Response goes here."
+  apiClient.get(submittedPath)
+    .then(response => handleSuccessResponse(response))
+    .catch(error => handleErrorResponse(error))
 
-  // const methodSwitch = (method, submittedPath, submittedBody) => ({
-  //   "GET": axios.get(submittedPath),
-  //   "POST": axios.post(submittedPath, {submittedBody}),
-  //   "PUT": axios.put(submittedPath, {submittedBody}),
-  //   "PATCH": axios.patch(submittedPath, {submittedBody}),
-  //   "DELETE": axios.delete(submittedPath),
-  // })[method]
+
+  // return "Placeholder! Response goes here."
+
+  // methodSwitch(method, submittedPath, submittedBody) {
+  //   var methodCalls = {
+  //     'GET': axios.get(submittedPath)
+  //       .then(function(response){
+  //         return response
+  //       })
+  //       .catch(function (error) {
+  //         return error
+  //       }),
+  //     'POST': axios.post(submittedPath, submittedBody)
+  //       .then(function(response){
+  //         return response
+  //       })
+  //       .catch(function (error) {
+  //         return error
+  //       }),
+  //     'PUT': axios.put(submittedPath, submittedBody)
+  //       .then(function(response){
+  //         return response
+  //       })
+  //       .catch(function (error) {
+  //         return error
+  //       }),
+  //     'PATCH': axios.patch(submittedPath, submittedBody)
+  //       .then(function(response){
+  //         return response
+  //       })
+  //       .catch(function (error) {
+  //         return error
+  //       }),
+  //     'PATCH': axios.delete(submittedPath)
+  //       .then(function(response){
+  //         return response
+  //       })
+  //       .catch(function (error) {
+  //         return error
+  //       }),
+  //   };
   //
-  // console.log(methodSwitch)
+  //   if (typeof methodCalls[method] !== 'function') {
+  //     throw new Error('Invalid action.');
+  //   }
   //
-  // methodSwitch(method, submittedPath, submittedBody)
-  //   .then(function (response) {
-  //     return response
-  //   })
-  //   .catch(function (error) {
-  //     return error
-  //   })
+  //   return methodCalls[method]();
+  // }
 }

@@ -2,8 +2,6 @@ import React from 'react'
 
 const TokenEntry = ({hasEnteredToken, tokenEditShow, toggleTokenEdit, onSubmit, onChange, value}) => {
 
-  // const buttonText = hasEnteredToken? "Edit token" : "Enter token"
-
   return (
     <nav className="top-bar">
       <p>

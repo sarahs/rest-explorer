@@ -42,7 +42,7 @@ const ParamsTable = ({method, paramsArray, enteredBodyParams, onChange, onClearB
     <div className="clear-div">
       <input type="button" value="Clear" onClick={e => onClearBody(e)} />
       {isBodyComplete
-        ? <span>Complete!</span>
+        ? <span><em>Complete!</em></span>
         : null
       }
     </div>

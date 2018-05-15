@@ -5,6 +5,7 @@ class Results extends React.Component {
     const {
       hasEnteredToken,
       categoriesListSel,
+      includeHeaders,
       method,
       SubmittedPath,
       SubmittedBodyParams,
@@ -27,7 +28,7 @@ class Results extends React.Component {
         </div>
         {hasEnteredToken
           ? categoriesListSel
-            ? (<pre ref={copyRef}>curl{"\n"}
+            ? (<pre ref={copyRef}>curl{includeHeaders ? " -i" : null}{"\n"}
                 {"  "}-H "Authorization: bearer STORED_API_TOKEN"{"\n"}
                 {methodLine}
                 {"  "}"{SubmittedPath}"
