@@ -10,7 +10,7 @@ import generatePath from '../utility/generatePath'
 import generateBodyParams from '../utility/generateBodyParams'
 import isComplete from '../utility/isComplete'
 import isValid from '../utility/isValid'
-// import runRequest from '../utility/runRequest'
+import apiClient from '../utility/apiClient'
 import axios from 'axios'
 import '../assets/App.css'
 
@@ -200,11 +200,11 @@ class App extends Component {
       : this.setState({includeHeaders: true})
   }
 
-  handleSubmit(e, submittedPath) {
+  handleSubmit(e, method, submittedPath, submittedBody) {
     this.setState({
       submitted: true
     })
-    this.runRequest(submittedPath)
+    this.runRequest(method, submittedPath, submittedBody)
     e.preventDefault()
   }
 
@@ -220,26 +220,45 @@ class App extends Component {
     this.clearResponse()
   }
 
-  runRequest(submittedPath, submittedBody) {
-    let apiClient = axios.create({
-      baseURL: apiBase,
-      timeout: 1000
-    })
+  runRequest(method, submittedPath, submittedBody) {
+    const request = apiClient(apiBase, this.state.token)
 
-    apiClient.defaults.headers.common['Authorization'] = this.state.token
-
-    apiClient.get(submittedPath)
-      .then(response => this.handleSuccessResponse(response))
-      .catch(error => this.handleErrorResponse(error))
+    switch(method) {
+      case 'GET':
+        request.get(submittedPath)
+          .then(response => this.handleSuccessResponse(response))
+          .catch(error => this.handleErrorResponse(error))
+        break
+      case 'POST':
+        request.post(submittedPath, submittedBody)
+          .then(response => this.handleSuccessResponse(response))
+          .catch(error => this.handleErrorResponse(error))
+        break
+      case 'PUT':
+        request.put(submittedPath, submittedBody)
+          .then(response => this.handleSuccessResponse(response))
+          .catch(error => this.handleErrorResponse(error))
+        break
+      case 'PATCH':
+        request.patch(submittedPath, submittedBody)
+          .then(response => this.handleSuccessResponse(response))
+          .catch(error => this.handleErrorResponse(error))
+        break
+      case 'DELETE':
+        request.delete(submittedPath)
+          .then(response => this.handleSuccessResponse(response))
+          .catch(error => this.handleErrorResponse(error))
+        break
+      default:
+        return "Invalid method!"
+      }
   }
 
   handleSuccessResponse(response) {
-    console.log(response)
     this.setState({response: response})
   }
 
   handleErrorResponse(error) {
-    console.log(error)
     this.setState({error: error})
   }
 
@@ -256,7 +275,6 @@ class App extends Component {
     const pathArray = path && path.split('/')
     const pathParamsArray = paramsList ? getTypeOfParams(path, paramsList)[0] : {}
     const bodyParamsArray = paramsList ? getTypeOfParams(path, paramsList)[1] : {}
-    const apiBase = "https://api.github.com"
     let docslink = categoriesListSel.length > 0 ? categoriesListSel : firstCategory
     docslink = docslink && docslink.split(/(?=[A-Z])/).join('_').toLowerCase()
     docslink = selectedEndpoint ? selectedEndpoint["documentationUrl"] : "https://developer.github.com/v3/" + docslink
@@ -301,7 +319,7 @@ class App extends Component {
             />
             <div className="button-row">
               {isCodeRunnable && this.state.hasEnteredToken
-                ? (<div className="run-button"><input type="button" value="Run!" onClick={e => this.handleSubmit(e, SubmittedPath, this.state.enteredBodyParams)} /></div>)
+                ? (<div className="run-button"><input type="button" value="Run!" onClick={e => this.handleSubmit(e, method, SubmittedPath, this.state.enteredBodyParams)} /></div>)
                 : (null)
               }
               {this.state.hasEnteredToken

@@ -1,17 +1,40 @@
 import axios from 'axios'
 
-export default function runRequest(apiClient,
-
-  const apiClient = axios.create({
+const apiClient = (apiBase, token = null) => {
+  const defaultOptions = {
     baseURL: apiBase,
-    timeout: 1000
-  })
+    timeout: 1000,
+    headers: {
+      Authorization: token ? `Token ${token}` : '',
+      'Content-Type': 'application/json'
+    }
+  }
 
-  apiClient.defaults.headers.common['Authorization'] = token
+  return {
+    get: (url, options = {}) => axios.get(url, { ...defaultOptions, ...options }),
+    post: (url, data, options = {}) => axios.post(url, data, { ...defaultOptions, ...options }),
+    patch: (url, data, options = {}) => axios.post(url, data, { ...defaultOptions, ...options }),
+    put: (url, data, options = {}) => axios.put(url, data, { ...defaultOptions, ...options }),
+    delete: (url, options = {}) => axios.delete(url, { ...defaultOptions, ...options }),
+  }
+}
 
-  apiClient.get(submittedPath)
-    .then(response => handleSuccessResponse(response))
-    .catch(error => handleErrorResponse(error))
+export default apiClient
+
+// import axios from 'axios'
+//
+// export default function runRequest(apiClient,
+//
+//   const apiClient = axios.create({
+//     baseURL: apiBase,
+//     timeout: 1000
+//   })
+//
+//   apiClient.defaults.headers.common['Authorization'] = token
+//
+//   apiClient.get(submittedPath)
+//     .then(response => handleSuccessResponse(response))
+//     .catch(error => handleErrorResponse(error))
 
 
   // return "Placeholder! Response goes here."
@@ -61,4 +84,4 @@ export default function runRequest(apiClient,
   //
   //   return methodCalls[method]();
   // }
-}
+// }

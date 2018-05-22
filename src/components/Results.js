@@ -29,7 +29,7 @@ class Results extends React.Component {
         {hasEnteredToken
           ? categoriesListSel
             ? (<pre ref={copyRef}>curl{includeHeaders ? " -i" : null}{"\n"}
-                {"  "}-H "Authorization: bearer STORED_API_TOKEN"{"\n"}
+                {"  "}-H "Authorization: token STORED_API_TOKEN"{"\n"}
                 {methodLine}
                 {"  "}"{SubmittedPath}"
                 {SubmittedBodyParams
