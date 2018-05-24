@@ -11,6 +11,7 @@ class Results extends React.Component {
       SubmittedBodyParams,
       copyRef,
       copySuccess,
+      copyType,
       onCopy,
       endpointName
     } = this.props
@@ -24,7 +25,7 @@ class Results extends React.Component {
             ? <h2>Generated cURL: {endpointName}</h2>
             : <h2>Generated cURL</h2>
           }
-          <span className="copy-span"><button onClick={e => onCopy(e)}>Copy</button>{copySuccess}</span>
+          <span className="copy-span"><button onClick={e => onCopy(e, "results")}>Copy</button>{copyType === "results" ? copySuccess : null}</span>
         </div>
         {hasEnteredToken
           ? categoriesListSel

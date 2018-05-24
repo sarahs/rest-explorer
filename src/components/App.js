@@ -37,6 +37,7 @@ class App extends Component {
       tokenEditShow: false,
       userInfoShow: false,
       userName: '',
+      rateLimitRemaining: '',
       rateLimit: '',
       routes: {},
       categoriesListSel: '',
@@ -44,6 +45,7 @@ class App extends Component {
       includeHeaders: true,
       enteredPathParams: {},
       enteredBodyParams: {},
+      copyType: 'results',
       copySuccess: '',
       submitted: false,
       response: '',
@@ -165,7 +167,7 @@ class App extends Component {
      return text.replace(/\n/g, " \\\n")
   }
 
-  copyToClipboard = (e) => {
+  copyToClipboard = (e, type) => {
     // let copyText, copyPre, range, selection
     let range, selection
     // copyPre = document.createElement("pre")
@@ -178,18 +180,25 @@ class App extends Component {
     if (window.getSelection) {
       selection = window.getSelection()
       range = document.createRange()
-      if (this.copyElement.current) {
-        range.selectNode(this.copyElement.current)
+      if (type === 'results') {
+        if (this.copyElement.current) {
+          range.selectNode(this.copyElement.current)
+        }
+        else {
+          range.selectNode(document.getElementsByTagName("pre").item(0))
+        }
       }
       else {
-        range.selectNode(document.getElementsByTagName("pre").item(0))
+        range.selectNode(document.getElementsByClassName(type)[0].children[1])
       }
       selection.removeAllRanges()
       selection.addRange(range)
       document.execCommand('copy')
-      this.setState({ copySuccess: ' Copied!' })
+      this.setState({
+        copyType: type,
+        copySuccess: ' Copied!'
+      })
     }
-    e.stopPropagation()
   }
 
   clearCopySelection() {
@@ -243,7 +252,7 @@ class App extends Component {
     switch(method) {
       case 'GET':
         request.get(submittedPath)
-          .then(response => this.handleSuccessResponse(response))
+          .then(response => this.handleSuccessResponse(response, submittedPath))
           .catch(error => this.handleErrorResponse(error))
         break
       case 'POST':
@@ -271,11 +280,14 @@ class App extends Component {
       }
   }
 
-  handleSuccessResponse(response) {
-    this.setState({
-      rateLimit: response.headers["x-ratelimit-remaining"],
-      userName: response.data.login
-    })
+  handleSuccessResponse(response, submittedPath) {
+    if (submittedPath === "https://api.github.com/user") {
+      this.setState({
+        rateLimitRemaining: response.headers["x-ratelimit-remaining"],
+        rateLimit: response.headers["x-ratelimit-limit"],
+        userName: response.data.login
+      })
+    }
     if (this.state.submitted) {
       this.setState({response: response})
     }
@@ -330,6 +342,7 @@ class App extends Component {
               toggleUserInfo={this.toggleUserInfo}
               userName={this.state.userName}
               rateLimit={this.state.rateLimit}
+              rateLimitRemaining={this.state.rateLimitRemaining}
             />
           </nav>
           <div className="results-container">
@@ -343,6 +356,7 @@ class App extends Component {
               SubmittedBodyParams={SubmittedBodyParams}
               copyRef={this.copyElement}
               copySuccess={this.state.copySuccess}
+              copyType={this.state.copyType}
               onCopy={this.copyToClipboard}
             />
             <div className="button-row">
@@ -414,24 +428,33 @@ class App extends Component {
             <div className="response">
               {this.state.response
                 ? <div className="status">
-                    <p>Status:</p>
+                    <div className="status-buttons">
+                      <p>Status:</p>
+                      <span className="copy-span"><button onClick={e => this.copyToClipboard(e, "status")}>Copy</button>{this.state.copyType === "status" ? this.state.copySuccess : null}</span>
+                    </div>
                     <pre>{this.state.response.status + ' ' + this.state.response.statusText}</pre>
                   </div>
                 : null
               }
               {this.state.response && this.state.includeHeaders
                 ? <div className="headers">
-                    <p>Headers:</p>
+                    <div className="headers-buttons">
+                      <p>Headers:</p>
+                      <span className="copy-span"><button onClick={e => this.copyToClipboard(e, "headers")}>Copy</button>{this.state.copyType === "headers" ? this.state.copySuccess : null}</span>
+                    </div>
                     <pre>{JSON.stringify(this.state.response.headers, null, 2)}</pre>
                   </div>
                 : null
               }
               {this.state.response
                 ? <div className="data">
-                    <p>Response:</p>
+                    <div className="data-buttons">
+                      <p>Response:</p>
+                      <span className="copy-span"><button onClick={e => this.copyToClipboard(e, "data")}>Copy</button>{this.state.copyType === "data" ? this.state.copySuccess : null}</span>
+                    </div>
                     <pre>{JSON.stringify(this.state.response.data, null, 2)}</pre>
                   </div>
-                : <div className="data"><pre>{this.state.error}</pre></div>
+                : <div className="data"><pre>{this.state.error === '{}' ? this.state.error : JSON.stringify(this.state.error, null, 2)}</pre></div>
               }
             </div>
           </div>

@@ -52,7 +52,7 @@ input[type="button"]:focus {
   outline: 0;
 }
 
-button:hover,
+button:not(.hover-button):hover,
 .top-bar input:not([type="text"]):hover,
 input[type="button"]:hover {
   background: var(--dark-gray-color);
@@ -267,10 +267,24 @@ pre {
   padding: 15px 20px 15px 18px;
 }
 
-.data pre,
 .status pre,
-.headers pre {
+.headers pre,
+.data pre {
   font-size: 15px;
+}
+
+.status-buttons,
+.headers-buttons,
+.data-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.status-buttons p,
+.headers-buttons p,
+.data-buttons p {
+  font-weight: bold;
 }
 
 code {
@@ -357,5 +371,5 @@ table tr:hover {
   visibility: visible;
   top: -5px;
   right: 105%;
-  margin-right: 10px;
+  margin-right: 15px;
 }
