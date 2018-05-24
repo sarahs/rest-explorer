@@ -74,20 +74,23 @@ input[type="button"]:hover {
   background: linear-gradient(to left, #677175, var(--dark-gray-color));
   color: var(--white-color);
   border-bottom: 1px solid #eeeeee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.top-bar p {
+.token-div p {
   margin-left: 10px;
 }
 
-.top-bar form {
+.token-div form {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   margin-bottom: 10px;
 }
 
-.top-bar input[type="text"] {
+.token-div input[type="text"] {
   width: 300px;
   border: 1px solid #cccccc;
   border-radius: 3px;
@@ -96,14 +99,39 @@ input[type="button"]:hover {
   font-size: 16px;
 }
 
-.top-bar button {
+.token-div button {
   margin-left: 15px;
 }
 
-.top-bar input {
+.token-div input {
   margin-left: 10px;
   -webkit-appearance: none;
   height: 40px;
+}
+
+.user-div {
+  display: flex;
+  align-items: center;
+}
+
+.user-div button {
+  margin-right: 10px;
+  padding: 0;
+}
+
+.user-div img {
+  padding: 3px 3px 0 3px;
+}
+
+.user-div p {
+  padding-right: 10px;
+  margin: 0;
+}
+
+.user-div span {
+  color: var(--teal-color);
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .results-container {
@@ -305,4 +333,29 @@ table tr:nth-child(even) {
 
 table tr:hover {
   background-color: #dddddd;
+}
+
+.hover-button {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.hover-button .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+}
+
+.hover-button:hover .tooltiptext {
+  visibility: visible;
+  top: -5px;
+  right: 105%;
+  margin-right: 10px;
 }

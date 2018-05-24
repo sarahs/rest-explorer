@@ -3,7 +3,7 @@ import React from 'react'
 const TokenEntry = ({hasEnteredToken, tokenEditShow, toggleTokenEdit, onSubmit, onChange, value}) => {
 
   return (
-    <nav className="top-bar">
+    <div className="token-div">
       <p>
         {hasEnteredToken
           ? (<span className="has-token">You have a stored API token. You can run requests on your <b>LIVE</b> GitHub data.
@@ -22,7 +22,7 @@ const TokenEntry = ({hasEnteredToken, tokenEditShow, toggleTokenEdit, onSubmit, 
       </form>)
       : (null)
     }
-    </nav>
+    </div>
   )
 }
 

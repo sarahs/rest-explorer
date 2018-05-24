@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import TokenEntry from './TokenEntry'
+import UserInfo from './UserInfo'
 import Picker from './Picker'
 import Results from './Results'
 import EndpointInfo from './EndpointInfo'
@@ -34,6 +35,9 @@ class App extends Component {
       token: storedToken,
       hasEnteredToken: hasStoredToken,
       tokenEditShow: false,
+      userInfoShow: false,
+      userName: '',
+      rateLimit: '',
       routes: {},
       categoriesListSel: '',
       namesListSel: '',
@@ -48,6 +52,7 @@ class App extends Component {
     this.inputElement = React.createRef();
     this.copyElement = React.createRef();
     this.toggleTokenEdit = this.toggleTokenEdit.bind(this);
+    this.toggleUserInfo = this.toggleUserInfo.bind(this);
     this.handleTokenSubmit = this.handleTokenSubmit.bind(this);
     this.handleTokenChange = this.handleTokenChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
@@ -73,11 +78,14 @@ class App extends Component {
         routes: response["data"]
       })
     )
-    document.addEventListener('mousedown', this.clearCopySelection);
+    document.addEventListener('mousedown', this.clearCopySelection)
+    if (this.state.hasEnteredToken) {
+      this.runRequest('GET', 'https://api.github.com/user', {})
+    }
   }
 
   componentWillUnmount() {
-    document.removeEventListener('mousedown', this.clearCopySelection);
+    document.removeEventListener('mousedown', this.clearCopySelection)
   }
 
   toggleTokenEdit() {
@@ -94,11 +102,20 @@ class App extends Component {
 
   handleTokenSubmit(e) {
     e.preventDefault()
+    this.state.token === ''
+      ? this.setState({hasEnteredToken: false})
+      : this.setState({hasEnteredToken: true})
     this.setState({
-      hasEnteredToken: true,
-      tokenEditShow: false
+      tokenEditShow: false,
+      token: this.state.token
     })
     localStorage.setItem('token', this.state.token)
+  }
+
+  toggleUserInfo() {
+    this.state.userInfoShow
+      ? this.setState({userInfoShow: false})
+      : this.setState({userInfoShow: true})
   }
 
   handleSelectChange(selectedOption, name) {
@@ -255,7 +272,13 @@ class App extends Component {
   }
 
   handleSuccessResponse(response) {
-    this.setState({response: response})
+    this.setState({
+      rateLimit: response.headers["x-ratelimit-remaining"],
+      userName: response.data.login
+    })
+    if (this.state.submitted) {
+      this.setState({response: response})
+    }
   }
 
   handleErrorResponse(error) {
@@ -289,21 +312,26 @@ class App extends Component {
     const SubmittedPath = generatePath(this.state.enteredPathParams, apiBase, this.inputElement, SubmittedQueryStringParams, path)
     const SubmittedBodyParams = generateBodyParams(method, this.state.enteredBodyParams)
 
-    // const myResponse = this.state.submitted ? runRequest(method, SubmittedPath, this.state.enteredBodyParams, apiBase, this.state.token, this.generateSuccessResponse, this.generateErrorResponse) : "{}"
-
-    // console.log(myResponse)
-
     return (
       <div className="container">
         <div className="top-container">
-          <TokenEntry
-            hasEnteredToken={this.state.hasEnteredToken}
-            tokenEditShow={this.state.tokenEditShow}
-            toggleTokenEdit={this.toggleTokenEdit}
-            onSubmit={this.handleTokenSubmit}
-            onChange={this.handleTokenChange}
-            value={this.state.token}
-          />
+          <nav className="top-bar">
+            <TokenEntry
+              hasEnteredToken={this.state.hasEnteredToken}
+              tokenEditShow={this.state.tokenEditShow}
+              toggleTokenEdit={this.toggleTokenEdit}
+              onSubmit={this.handleTokenSubmit}
+              onChange={this.handleTokenChange}
+              value={this.state.token}
+            />
+            <UserInfo
+              hasEnteredToken={this.state.hasEnteredToken}
+              userInfoShow={this.state.userInfoShow}
+              toggleUserInfo={this.toggleUserInfo}
+              userName={this.state.userName}
+              rateLimit={this.state.rateLimit}
+            />
+          </nav>
           <div className="results-container">
             <Results
               hasEnteredToken={this.state.hasEnteredToken}
