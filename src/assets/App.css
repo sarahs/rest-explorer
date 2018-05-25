@@ -124,6 +124,7 @@ input[type="button"]:hover {
 }
 
 .user-div p {
+  padding-top: 5px;
   padding-right: 10px;
   margin: 0;
 }
@@ -199,7 +200,7 @@ input[type="button"]:hover {
   align-items: center;
 }
 
-.button-row .path-not-complete, .button-row .include-headers {
+.button-row .path-not-complete, .button-row .include-headers, .button-row .include-status {
   padding-left: 10px;
 }
 

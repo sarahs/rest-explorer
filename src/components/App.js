@@ -25,17 +25,22 @@ class App extends Component {
 
     let storedToken = ''
     let hasStoredToken = false
+    let userInfoShowStored = false
 
     if (localStorage.getItem('token')) {
       storedToken = localStorage.getItem('token')
       hasStoredToken = true
     }
 
+    if (localStorage.getItem('userInfoShow') === 'false') {
+      userInfoShowStored = true
+    }
+
     this.state = {
       token: storedToken,
       hasEnteredToken: hasStoredToken,
       tokenEditShow: false,
-      userInfoShow: false,
+      userInfoShow: userInfoShowStored,
       userName: '',
       rateLimitRemaining: '',
       rateLimit: '',
@@ -43,6 +48,7 @@ class App extends Component {
       categoriesListSel: '',
       namesListSel: '',
       includeHeaders: true,
+      includeStatus: true,
       enteredPathParams: {},
       enteredBodyParams: {},
       copyType: 'results',
@@ -65,7 +71,8 @@ class App extends Component {
     this.escapeNewLines = this.escapeNewLines.bind(this);
     this.handleClearPath = this.handleClearPath.bind(this);
     this.handleClearBody = this.handleClearBody.bind(this);
-    this.toggleHeaders = this.toggleHeaders.bind(this)
+    this.toggleHeaders = this.toggleHeaders.bind(this);
+    this.toggleStatus = this.toggleStatus.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this);
     this.runRequest = this.runRequest.bind(this);
     this.clearResponse = this.clearResponse.bind(this);
@@ -118,6 +125,7 @@ class App extends Component {
     this.state.userInfoShow
       ? this.setState({userInfoShow: false})
       : this.setState({userInfoShow: true})
+    localStorage.setItem('userInfoShow', this.state.userInfoShow)
   }
 
   handleSelectChange(selectedOption, name) {
@@ -226,6 +234,12 @@ class App extends Component {
       : this.setState({includeHeaders: true})
   }
 
+  toggleStatus() {
+    this.state.includeStatus
+      ? this.setState({includeStatus: false})
+      : this.setState({includeStatus: true})
+  }
+
   handleSubmit(e, method, submittedPath, submittedBody) {
     this.setState({
       submitted: true
@@ -300,7 +314,6 @@ class App extends Component {
   render() {
     const {routes, categoriesListSel, namesListSel} = this.state
     const categoriesList = Object.keys(routes)
-    const firstCategory = categoriesList.length > 0 && categoriesList[0]
     const selectedCategory = categoriesListSel && routes[categoriesListSel]
     const namesList = categoriesListSel && selectedCategory.map(n => n["name"])
     const selectedEndpoint = namesListSel && selectedCategory && selectedCategory.find(x => x.name === namesListSel)
@@ -310,10 +323,11 @@ class App extends Component {
     const pathArray = path && path.split('/')
     const pathParamsArray = paramsList ? getTypeOfParams(path, paramsList)[0] : {}
     const bodyParamsArray = paramsList ? getTypeOfParams(path, paramsList)[1] : {}
-    let docslink = categoriesListSel.length > 0 ? categoriesListSel : firstCategory
+    let docslink = categoriesListSel.length > 0 ? categoriesListSel : null
     docslink = docslink && docslink.split(/(?=[A-Z])/).join('_').toLowerCase()
-    docslink = selectedEndpoint ? selectedEndpoint["documentationUrl"] : "https://developer.github.com/v3/" + docslink
-    const endpointName = selectedEndpoint && <a href={docslink}>{selectedEndpoint.name}</a>
+    const docslinkCategory = docslink && "https://developer.github.com/v3/" + docslink
+    const docslinkEndpoint = selectedEndpoint ? selectedEndpoint["documentationUrl"] : null
+    const endpointName = selectedEndpoint && docslink ? <a href={docslink}>{selectedEndpoint.name}</a> : null
     const isPathValid = isValid(pathParamsArray, this.state.enteredPathParams)[0]
     const isPathComplete = method ? isComplete(pathParamsArray, this.state.enteredPathParams, "path") && isPathValid : "ignore"
     const invalidCharsEntered = isValid(pathParamsArray, this.state.enteredPathParams)[1]
@@ -372,7 +386,8 @@ class App extends Component {
                 ? (<div className="path-not-complete">Invalid characters entered: "{invalidCharsEntered}"</div>)
                 : (null)
               }
-              <label className="include-headers"><input name="includeHeaders" type="checkbox" checked={this.state.includeHeaders} onChange={this.toggleHeaders} /> Include headers in response</label>
+              <label className="include-status"><input name="includeStatus" type="checkbox" checked={this.state.includeStatus} onChange={this.toggleStatus} /> Include status</label>
+              <label className="include-headers"><input name="includeHeaders" type="checkbox" checked={this.state.includeHeaders} onChange={this.toggleHeaders} /> Include headers</label>
             </div>
           </div>
         </div>
@@ -384,7 +399,7 @@ class App extends Component {
               value={categoriesListSel}
               onChange={this.handleSelectChange}
               options={categoriesList}
-              docslink={docslink}
+              docslink={docslinkCategory}
             />
           {categoriesListSel
             ? (<Picker
@@ -392,7 +407,7 @@ class App extends Component {
                 value={namesListSel}
                 onChange={this.handleSelectChange}
                 options={namesList}
-                docslink={docslink}
+                docslink={docslinkEndpoint}
               />)
             : ( null )
           }
@@ -426,7 +441,7 @@ class App extends Component {
           <div className="right-panel">
             <h2>Response</h2>
             <div className="response">
-              {this.state.response
+              {this.state.response && this.state.includeStatus
                 ? <div className="status">
                     <div className="status-buttons">
                       <p>Status:</p>

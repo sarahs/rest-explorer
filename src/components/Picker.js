@@ -20,7 +20,10 @@ const Picker = ({name, value, onChange, options, docslink}) => {
         onChange={selectedOption => onChange(selectedOption, name)}
         options={selectOptions}
       />
-      <div className="docslink"><a href={docslink}>(docs)</a></div>
+      {docslink
+        ? <div className="docslink"><a href={docslink}>(docs)</a></div>
+        : null
+      }
     </div>
   )
 }
