@@ -2,9 +2,22 @@ import React from 'react'
 import ParamsTable from './ParamsTable'
 import PathInput from './PathInput'
 
-const ParamsForm = ({pathParamsArray, pathArray, apiBase, enteredPathParams,
-  onPathChange, inputRef, method, bodyParamsArray, enteredBodyParams,
-  onBodyChange, onClearPath, onClearBody, isPathComplete, isBodyComplete}) => {
+const ParamsForm = ({
+    pathParamsArray,
+    pathArray,
+    apiBase,
+    enteredPathParams,
+    onPathChange,
+    inputRef,
+    method,
+    bodyParamsArray,
+    enteredBodyParams,
+    onBodyChange,
+    onClearPath,
+    onClearBody,
+    isPathComplete,
+    isBodyComplete
+  }) => {
 
     return (
       <div>

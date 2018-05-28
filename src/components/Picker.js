@@ -2,7 +2,13 @@ import React from 'react'
 import Select from 'react-select'
 import 'react-select/dist/react-select.css'
 
-const Picker = ({name, value, onChange, options, docslink}) => {
+const Picker = ({
+    name,
+    value,
+    onChange,
+    options,
+    docslink
+  }) => {
 
   const selectOptions = options.map(function(i) {
     let selectObj = {}

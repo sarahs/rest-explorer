@@ -1,6 +1,13 @@
 import React from 'react'
 
-const TokenEntry = ({hasEnteredToken, tokenEditShow, toggleTokenEdit, onSubmit, onChange, value}) => {
+const TokenEntry = ({
+    hasEnteredToken,
+    tokenEditShow,
+    toggleTokenEdit,
+    onSubmit,
+    onChange,
+    value
+  }) => {
 
   return (
     <div className="token-div">

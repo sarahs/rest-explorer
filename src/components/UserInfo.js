@@ -1,7 +1,15 @@
 import React from 'react'
 import userIcon from '../assets/user_icon.png'
 
-const UserInfo = ({hasEnteredToken, toggleUserInfo, userInfoShow, userName, rateLimit, rateLimitRemaining}) => {
+const UserInfo = ({
+    hasEnteredToken,
+    toggleUserInfo,
+    userInfoShow,
+    userAvatarURL,
+    userName,
+    rateLimit,
+    rateLimitRemaining
+  }) => {
 
   return (
     <div className="user-div">
@@ -21,7 +29,10 @@ const UserInfo = ({hasEnteredToken, toggleUserInfo, userInfoShow, userName, rate
                ? <span className="tooltiptext">Show user information</span>
                : null
              }
-             <img alt="" src={userIcon} />
+             {userAvatarURL
+               ? <img alt="" src={userAvatarURL} height="50" width="50"/>
+               : <img alt="" src={userIcon} />
+             }
            </button>)
         : (null)
       }

@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import TokenEntry from './TokenEntry'
 import UserInfo from './UserInfo'
 import Picker from './Picker'
-import Results from './Results'
+import CurlResults from './CurlResults'
 import EndpointInfo from './EndpointInfo'
 import ParamsForm from './ParamsForm'
+import Response from './Response'
 import getTypeOfParams from '../utility/getTypeOfParams'
 import generateQueryStringParams from '../utility/generateQueryStringParams'
 import generatePath from '../utility/generatePath'
@@ -42,6 +43,7 @@ class App extends Component {
       tokenEditShow: false,
       userInfoShow: userInfoShowStored,
       userName: '',
+      userAvatarURL: '',
       rateLimitRemaining: '',
       rateLimit: '',
       routes: {},
@@ -54,8 +56,8 @@ class App extends Component {
       copyType: 'results',
       copySuccess: '',
       submitted: false,
-      response: '',
-      error: '{}'
+      response: '{}',
+      error: ''
     }
     this.inputElement = React.createRef();
     this.copyElement = React.createRef();
@@ -165,6 +167,7 @@ class App extends Component {
 
   handleBodyFormChange(e) {
     const enteredBodyParams = this.state.enteredBodyParams
+    console.log(e.target.value)
     enteredBodyParams[e.target.name] = e.target.value
     this.setState({
       enteredBodyParams: enteredBodyParams
@@ -254,8 +257,8 @@ class App extends Component {
       namesListSel: '',
       enteredPathParams: {},
       enteredBodyParams: {},
-      response: '',
-      error: '{}'
+      response: '{}',
+      error: ''
     })
     this.clearResponse()
   }
@@ -299,7 +302,8 @@ class App extends Component {
       this.setState({
         rateLimitRemaining: response.headers["x-ratelimit-remaining"],
         rateLimit: response.headers["x-ratelimit-limit"],
-        userName: response.data.login
+        userName: response.data.login,
+        userAvatarURL: response.data.avatar_url
       })
     }
     if (this.state.submitted) {
@@ -338,6 +342,10 @@ class App extends Component {
     const SubmittedPath = generatePath(this.state.enteredPathParams, apiBase, this.inputElement, SubmittedQueryStringParams, path)
     const SubmittedBodyParams = generateBodyParams(method, this.state.enteredBodyParams)
 
+    console.log(SubmittedBodyParams)
+
+    const responseOrError = this.state.error ? this.state.error.response : this.state.response
+
     return (
       <div className="container">
         <div className="top-container">
@@ -354,13 +362,14 @@ class App extends Component {
               hasEnteredToken={this.state.hasEnteredToken}
               userInfoShow={this.state.userInfoShow}
               toggleUserInfo={this.toggleUserInfo}
+              userAvatarURL={this.state.userAvatarURL}
               userName={this.state.userName}
               rateLimit={this.state.rateLimit}
               rateLimitRemaining={this.state.rateLimitRemaining}
             />
           </nav>
           <div className="results-container">
-            <Results
+            <CurlResults
               hasEnteredToken={this.state.hasEnteredToken}
               categoriesListSel={this.state.categoriesListSel}
               includeHeaders={this.state.includeHeaders}
@@ -438,42 +447,23 @@ class App extends Component {
           }
           </div>
           <div className="vertical-gutter"/>
-          <div className="right-panel">
-            <h2>Response</h2>
-            <div className="response">
-              {this.state.response && this.state.includeStatus
-                ? <div className="status">
-                    <div className="status-buttons">
-                      <p>Status:</p>
-                      <span className="copy-span"><button onClick={e => this.copyToClipboard(e, "status")}>Copy</button>{this.state.copyType === "status" ? this.state.copySuccess : null}</span>
-                    </div>
-                    <pre>{this.state.response.status + ' ' + this.state.response.statusText}</pre>
-                  </div>
-                : null
-              }
-              {this.state.response && this.state.includeHeaders
-                ? <div className="headers">
-                    <div className="headers-buttons">
-                      <p>Headers:</p>
-                      <span className="copy-span"><button onClick={e => this.copyToClipboard(e, "headers")}>Copy</button>{this.state.copyType === "headers" ? this.state.copySuccess : null}</span>
-                    </div>
-                    <pre>{JSON.stringify(this.state.response.headers, null, 2)}</pre>
-                  </div>
-                : null
-              }
-              {this.state.response
-                ? <div className="data">
-                    <div className="data-buttons">
-                      <p>Response:</p>
-                      <span className="copy-span"><button onClick={e => this.copyToClipboard(e, "data")}>Copy</button>{this.state.copyType === "data" ? this.state.copySuccess : null}</span>
-                    </div>
-                    <pre>{JSON.stringify(this.state.response.data, null, 2)}</pre>
-                  </div>
-                : <div className="data"><pre>{this.state.error === '{}' ? this.state.error : JSON.stringify(this.state.error, null, 2)}</pre></div>
-              }
+            <div className="right-panel">
+              <h2>Response</h2>
+              {responseOrError === '{}'
+                ? (<div className="response">
+                     <pre>{this.state.response}</pre>
+                   </div>)
+                : (<Response
+                      responseOrError={responseOrError}
+                      includeStatus={this.state.includeStatus}
+                      includeHeaders={this.state.includeHeaders}
+                      copySuccess={this.state.copySuccess}
+                      copyType={this.state.copyType}
+                      onCopy={this.copyToClipboard}
+                   />)
+                }
             </div>
-          </div>
-        </div>
+         </div>
       </div>
     )
   }
