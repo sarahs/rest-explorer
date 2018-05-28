@@ -114,9 +114,32 @@ input[type="button"]:hover {
   align-items: center;
 }
 
-.user-div button {
+.hover-button {
   margin-right: 10px;
   padding: 0;
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.hover-button .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  margin-top: 11px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+}
+
+.hover-button:hover .tooltiptext {
+  visibility: visible;
+  top: -5px;
+  right: 105%;
+  margin-right: 10px;
 }
 
 .user-div img {
@@ -348,29 +371,4 @@ table tr:nth-child(even) {
 
 table tr:hover {
   background-color: #dddddd;
-}
-
-.hover-button {
-  position: relative;
-  display: inline-block;
-  border-bottom: 1px dotted black;
-}
-
-.hover-button .tooltiptext {
-  visibility: hidden;
-  width: 120px;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-}
-
-.hover-button:hover .tooltiptext {
-  visibility: visible;
-  top: -5px;
-  right: 105%;
-  margin-right: 15px;
 }
