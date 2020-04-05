@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@octokit/routes": "^20.9.2",
     "auth0-js": "^9.5.1",
     "axios": "^0.18.0",
     "oauthio-web": "^0.6.2",
