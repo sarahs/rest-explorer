@@ -2,19 +2,19 @@ import React from 'react'
 import PathInputSpan from './PathInputSpan'
 import PathConstantSpan from './PathConstantSpan'
 
-const PathInput = ({pathArray, apiBase, enteredPathParams, onChange, inputRef}) => (
+const PathInput = ({ pathArray, apiBase, enteredPathParams, onChange, inputRef }) => (
   <code ref={inputRef}>
-  {apiBase}
-  {pathArray.map((seg, i, arr) =>
-    seg.match(/^:/)
-      ? arr.length - 1 === i
-        ? (<PathInputSpan
+    {apiBase}
+    {pathArray.map((seg, i, arr) =>
+      seg.match(/^:/)
+        ? arr.length - 1 === i
+          ? (<PathInputSpan
             name={seg}
             key={i}
             enteredPathParams={enteredPathParams}
             onChange={onChange}
           />)
-        : (<React.Fragment key={i}>
+          : (<React.Fragment key={i}>
             <PathInputSpan
               name={seg}
               key={i}
@@ -23,18 +23,18 @@ const PathInput = ({pathArray, apiBase, enteredPathParams, onChange, inputRef}) 
             />
             /
           </React.Fragment>)
-    : arr.length - 1 === i
-        ? (<PathConstantSpan
+        : arr.length - 1 === i
+          ? (<PathConstantSpan
             name={seg}
             key={i}
           />)
-        : (<PathConstantSpan
-            name={seg + "/"}
+          : (<PathConstantSpan
+            name={seg + '/'}
             key={i}
           />)
-        )
-      }
-    </code>
+    )
+    }
+  </code>
 )
 
 export default PathInput

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const PathConstant = ({name, i}) => (
+const PathConstant = ({ name, i }) => (
   <span key={i}>{name}</span>
 )
 

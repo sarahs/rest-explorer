@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React from 'react'
+import routes from '@octokit/routes'
 import TokenEntry from './TokenEntry'
 import UserInfo from './UserInfo'
 import Picker from './Picker'
@@ -13,14 +14,11 @@ import generateBodyParams from '../utility/generateBodyParams'
 import isComplete from '../utility/isComplete'
 import isValid from '../utility/isValid'
 import apiClient from '../utility/apiClient'
-import axios from 'axios'
 import '../assets/App.css'
-
-const RoutesURL = 'https://octokit.github.io/routes/index.json'
 
 const apiBase = 'https://api.github.com'
 
-class App extends Component {
+export default class App extends React.Component {
   constructor(props) {
     super(props)
 
@@ -28,6 +26,7 @@ class App extends Component {
     let hasStoredToken = false
     let userInfoShowStored = false
 
+    // this is... not great
     if (localStorage.getItem('token')) {
       storedToken = localStorage.getItem('token')
       hasStoredToken = true
@@ -46,7 +45,7 @@ class App extends Component {
       userAvatarURL: '',
       rateLimitRemaining: '',
       rateLimit: '',
-      routes: {},
+      routes: routes,
       categoriesListSel: '',
       namesListSel: '',
       includeHeaders: true,
@@ -84,11 +83,6 @@ class App extends Component {
   }
 
   componentDidMount() {
-    axios.get(RoutesURL)
-      .then(response => this.setState({
-        routes: response["data"]
-      })
-    )
     document.addEventListener('mousedown', this.clearCopySelection)
     if (this.state.hasEnteredToken) {
       this.runRequest('GET', 'https://api.github.com/user', {})
@@ -167,7 +161,6 @@ class App extends Component {
 
   handleBodyFormChange(e) {
     const enteredBodyParams = this.state.enteredBodyParams
-    console.log(e.target.value)
     enteredBodyParams[e.target.name] = e.target.value
     this.setState({
       enteredBodyParams: enteredBodyParams
@@ -342,8 +335,6 @@ class App extends Component {
     const SubmittedPath = generatePath(this.state.enteredPathParams, apiBase, this.inputElement, SubmittedQueryStringParams, path)
     const SubmittedBodyParams = generateBodyParams(method, this.state.enteredBodyParams)
 
-    console.log(SubmittedBodyParams)
-
     const responseOrError = this.state.error ? this.state.error.response : this.state.response
 
     return (
@@ -468,5 +459,3 @@ class App extends Component {
     )
   }
 }
-
-export default App

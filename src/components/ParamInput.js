@@ -1,9 +1,9 @@
 import React from 'react'
 
-const ParamInput = ({onChange, name, value}) => (
+const ParamInput = ({ onChange, name, value }) => (
   <td>
     <input
-      type="text"
+      type='text'
       name={name}
       value={value}
       onChange={e => onChange(e)}

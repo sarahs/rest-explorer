@@ -1,9 +1,9 @@
 import React from 'react'
 import AutosizeInput from 'react-input-autosize'
 
-const PathInputSpan = ({name, enteredPathParams, i, onChange}) => (
+const PathInputSpan = ({ name, enteredPathParams, i, onChange }) => (
   <AutosizeInput
-    type="text"
+    type='text'
     name={name}
     value={enteredPathParams[name] || name}
     key={i}
