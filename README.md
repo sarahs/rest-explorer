@@ -4,7 +4,7 @@
 
 ## About
 
-Rest Explorer is an interactive GUI for [GitHub's REST API](https://developer.github.com/v3/). You can explore endpoints and their documentation, and even run methods on your live GitHub data.
+Rest Explorer is an interactive GUI for [GitHub's REST API](https://developer.github.com/v3/). You can explore endpoints and their documentation, and run methods on your live GitHub data.
 
 It was inspired by GitHub's GraphQL Explorer: http://developer.github.com/v4/explorer
 
