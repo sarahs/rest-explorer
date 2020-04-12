@@ -1,6 +1,6 @@
 # Rest Explorer
 
-:warning: This is project is a work in a progress. I created it as an experiment while learning React. :warning:
+:warning: This project is a work in a progress. :warning:
 
 ## About
 
